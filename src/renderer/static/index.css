@@ -1,9 +1,4 @@
-/* Include embedded Noto Sans SC font — must come before other rules */
-@import './noto-sans-sc.css';
-
-/* @tailwind base;
-@tailwind components;
-@tailwind utilities; */
+/* Font is controlled via CSS variable --chatbox-font-family, set by settings */
 
 .title-bar {
   -webkit-app-region: drag;
@@ -15,8 +10,8 @@
 
 body {
   margin: 0;
-  font-family: "Noto Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
-    "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: var(--chatbox-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overscroll-behavior: none;

@@ -1061,5 +1061,12 @@
   "Your license has expired.": "لقد انتهت صلاحية ترخيصك.",
   "Your license has expired. Please check your subscription or purchase a new one.": "انتهت صلاحية ترخيصك. يرجى التحقق من اشتراكك أو شراء ترخيص جديد.",
   "Your license has expired. You can continue using your quota pack.": "انتهت صلاحية ترخيصك. يمكنك متابعة استخدام حزمة حصتك.",
-  "Your rating on the App Store would help make Chatbox even better!": "تقييمك في App Store سيساعد على جعل Chatbox أفضل!"
+  "Your rating on the App Store would help make Chatbox even better!": "تقييمك في App Store سيساعد على جعل Chatbox أفضل!",
+  "Font Family": "الخط",
+  "System Default": "الافتراضي",
+  "fontFamilyHint": "اختر خطًا لواجهة الدردشة. يجب أن يكون الخط مثبتًا على نظامك.",
+  "Latin Font": "الخط اللاتيني",
+  "CJK Font": "خط CJK (صيني / ياباني / كوري)",
+  "latinFontHint": "خط للغة الإنجليزية والأحرف اللاتينية الأخرى.",
+  "cjkFontHint": "خط للأحرف الصينية واليابانية والكورية."
 }

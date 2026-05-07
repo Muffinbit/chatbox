@@ -1061,5 +1061,12 @@
   "Your license has expired.": "Su licencia ha caducado.",
   "Your license has expired. Please check your subscription or purchase a new one.": "Su licencia ha expirado. Por favor, verifique su suscripción o adquiera una nueva.",
   "Your license has expired. You can continue using your quota pack.": "Su licencia ha caducado. Puede seguir usando su paquete de cuota.",
-  "Your rating on the App Store would help make Chatbox even better!": "Tu calificación en la App Store ayudará a hacer que Chatbox sea aún mejor!"
+  "Your rating on the App Store would help make Chatbox even better!": "Tu calificación en la App Store ayudará a hacer que Chatbox sea aún mejor!",
+  "Font Family": "Fuente",
+  "System Default": "Predeterminado",
+  "fontFamilyHint": "Seleccione una fuente para la interfaz de chat. La fuente debe estar instalada en su sistema.",
+  "Latin Font": "Fuente latina",
+  "CJK Font": "Fuente CJK (Chino / Japonés / Coreano)",
+  "latinFontHint": "Fuente para inglés y otros caracteres latinos.",
+  "cjkFontHint": "Fuente para caracteres chinos, japoneses y coreanos."
 }

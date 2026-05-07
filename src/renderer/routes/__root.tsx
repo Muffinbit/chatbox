@@ -305,10 +305,10 @@ function Root() {
   )
 }
 
-const creteMantineTheme = (scale = 1) =>
+const creteMantineTheme = (fontFamily?: string, scale = 1) =>
   createTheme({
     /** Put your mantine theme override here */
-    fontFamily: '"Noto Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+    fontFamily: fontFamily || '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
     scale,
     primaryColor: 'chatbox-brand',
     colors: {
@@ -580,10 +580,33 @@ export const Route = createRootRoute({
     const theme = useAppTheme()
     const _theme = useTheme()
     const fontSize = useSettingsStore((state) => state.fontSize)
+    const fontFamily = useSettingsStore((state) => state.fontFamily)
+    const fontFamilyCJK = useSettingsStore((state) => state.fontFamilyCJK)
+    const fontFamilyLatin = useSettingsStore((state) => state.fontFamilyLatin)
     useEffect(() => {
       document.documentElement.style.setProperty('--chatbox-msg-font-size', `${fontSize}px`)
     }, [fontSize])
-    const mantineTheme = useMemo(() => creteMantineTheme(), [])
+    const resolvedFontFamily = useMemo(() => {
+      // fontFamily (legacy) takes priority if set
+      if (fontFamily) return fontFamily
+      // Combine CJK + Latin into a single font-family stack
+      const parts: string[] = []
+      if (fontFamilyLatin) parts.push(fontFamilyLatin)
+      if (fontFamilyCJK) parts.push(fontFamilyCJK)
+      if (parts.length > 0) {
+        parts.push('sans-serif')
+        return parts.join(', ')
+      }
+      return undefined
+    }, [fontFamily, fontFamilyCJK, fontFamilyLatin])
+    useEffect(() => {
+      if (resolvedFontFamily) {
+        document.documentElement.style.setProperty('--chatbox-font-family', resolvedFontFamily)
+      } else {
+        document.documentElement.style.removeProperty('--chatbox-font-family')
+      }
+    }, [resolvedFontFamily])
+    const mantineTheme = useMemo(() => creteMantineTheme(resolvedFontFamily), [resolvedFontFamily])
 
     return (
       <MantineProvider

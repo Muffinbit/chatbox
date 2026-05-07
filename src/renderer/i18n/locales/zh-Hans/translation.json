@@ -1069,5 +1069,12 @@
   "Your license has expired.": "您的许可证已过期。",
   "Your license has expired. Please check your subscription or purchase a new one.": "您的 license 已过期。请检查您的订阅或重新购买。",
   "Your license has expired. You can continue using your quota pack.": "您的许可证已过期。您可以继续使用您的配额包。",
-  "Your rating on the App Store would help make Chatbox even better!": "您的 App Store 评分将帮助 Chatbox 变得更好！"
+  "Your rating on the App Store would help make Chatbox even better!": "您的 App Store 评分将帮助 Chatbox 变得更好！",
+  "Font Family": "字体",
+  "System Default": "系统默认",
+  "fontFamilyHint": "选择聊天界面的字体。字体需要已安装在你的系统上。",
+  "Latin Font": "英文字体",
+  "CJK Font": "中文字体",
+  "latinFontHint": "用于英文及其他拉丁字符的字体。",
+  "cjkFontHint": "用于中文、日文、韩文字符的字体。"
 }

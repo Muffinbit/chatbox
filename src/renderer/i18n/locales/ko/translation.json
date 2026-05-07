@@ -1062,5 +1062,12 @@
   "Your license has expired.": "라이선스가 만료되었습니다.",
   "Your license has expired. Please check your subscription or purchase a new one.": "라이선스가 만료되었습니다. 구독을 확인하거나 새로운 라이선스를 구매하세요.",
   "Your license has expired. You can continue using your quota pack.": "라이선스가 만료되었습니다. 할당량 팩은 계속 사용하실 수 있습니다.",
-  "Your rating on the App Store would help make Chatbox even better!": "App Store에서 평점을 주시면 Chatbox을 더 나은 것으로 만들 수 있습니다!"
+  "Your rating on the App Store would help make Chatbox even better!": "App Store에서 평점을 주시면 Chatbox을 더 나은 것으로 만들 수 있습니다!",
+  "Font Family": "글꼴",
+  "System Default": "시스템 기본",
+  "fontFamilyHint": "채팅 인터페이스의 글꼴을 선택하세요. 글꼴은 시스템에 설치되어 있어야 합니다.",
+  "Latin Font": "라틴 글꼴",
+  "CJK Font": "한중일 글꼴",
+  "latinFontHint": "영문 및 라틴 문자용 글꼴.",
+  "cjkFontHint": "한국어, 중국어, 일본어 문자용 글꼴."
 }

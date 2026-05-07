@@ -1062,5 +1062,12 @@
   "Your license has expired.": "ライセンスの有効期限が切れました。",
   "Your license has expired. Please check your subscription or purchase a new one.": "ライセンスが期限切れです。サブスクリプションを確認するか、新しいものを購入してください。",
   "Your license has expired. You can continue using your quota pack.": "ライセンスの有効期限が切れました。クォータパックは引き続きご利用いただけます。",
-  "Your rating on the App Store would help make Chatbox even better!": "App Storeでの評価は、Chatboxをさらに良くするのに役立ちます！"
+  "Your rating on the App Store would help make Chatbox even better!": "App Storeでの評価は、Chatboxをさらに良くするのに役立ちます！",
+  "Font Family": "フォント",
+  "System Default": "システムデフォルト",
+  "fontFamilyHint": "チャットインターフェースのフォントを選択してください。フォントはシステムにインストールされている必要があります。",
+  "Latin Font": "欧文フォント",
+  "CJK Font": "中日韓フォント",
+  "latinFontHint": "英字・ラテン文字用のフォント。",
+  "cjkFontHint": "中国語・日本語・韓国語用のフォント。"
 }

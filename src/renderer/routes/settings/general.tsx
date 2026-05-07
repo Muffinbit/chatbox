@@ -1,5 +1,6 @@
 import {
   Alert,
+  Box,
   Button,
   Checkbox,
   Divider,
@@ -33,6 +34,24 @@ import { useSettingsStore } from '@/stores/settingsStore'
 export const Route = createFileRoute('/settings/general')({
   component: RouteComponent,
 })
+
+const CJK_FONT_PRESETS = [
+  { value: '', label: 'System Default' },
+  { value: '"PingFang SC", "Microsoft YaHei"', label: '苹方 / 微软雅黑' },
+  { value: '"Noto Sans SC", "PingFang SC"', label: '思源黑体 (Noto Sans SC)' },
+  { value: '"Source Han Sans SC", "Noto Sans SC"', label: '思源黑体 (Source Han Sans)' },
+  { value: '"LXGW WenKai", "LXGW WenKai TC"', label: '霞鹜文楷' },
+  { value: '"Source Han Serif SC", "Noto Serif SC"', label: '思源宋体' },
+  { value: '"SimSun", "Songti SC"', label: '宋体' },
+]
+
+const LATIN_FONT_PRESETS = [
+  { value: '', label: 'System Default' },
+  { value: '"Inter", "Segoe UI", system-ui', label: 'Inter' },
+  { value: '"SF Pro Display", "SF Pro Text", -apple-system', label: 'SF Pro (macOS)' },
+  { value: '"Segoe UI", system-ui', label: 'Segoe UI (Windows)' },
+  { value: '"Roboto", "Noto Sans", system-ui', label: 'Roboto' },
+]
 
 export function RouteComponent() {
   const { t } = useTranslation()
@@ -116,6 +135,43 @@ export function RouteComponent() {
               })
             }
           />
+        </Stack>
+
+        {/* Font Family */}
+        <Stack gap="xs">
+          <Text>{t('Latin Font')}</Text>
+          <Box maw={320}>
+            <AdaptiveSelect
+              comboboxProps={{ withinPortal: true }}
+              value={settings.fontFamilyLatin || ''}
+              data={LATIN_FONT_PRESETS}
+              placeholder={t('System Default')}
+              clearable
+              searchable
+              onChange={(val) => setSettings({ fontFamilyLatin: val || undefined })}
+            />
+          </Box>
+          <Text size="xs" c="chatbox-tertiary">
+            {t('latinFontHint')}
+          </Text>
+        </Stack>
+
+        <Stack gap="xs">
+          <Text>{t('CJK Font')}</Text>
+          <Box maw={320}>
+            <AdaptiveSelect
+              comboboxProps={{ withinPortal: true }}
+              value={settings.fontFamilyCJK || ''}
+              data={CJK_FONT_PRESETS}
+              placeholder={t('System Default')}
+              clearable
+              searchable
+              onChange={(val) => setSettings({ fontFamilyCJK: val || undefined })}
+            />
+          </Box>
+          <Text size="xs" c="chatbox-tertiary">
+            {t('cjkFontHint')}
+          </Text>
         </Stack>
 
         {/* Startup Page */}
