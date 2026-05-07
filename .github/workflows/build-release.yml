@@ -7,16 +7,6 @@ name: Build & Release
     tags:
       - 'v*'
   workflow_dispatch:
-    inputs:
-      platform:
-        description: 'Platform to build'
-        required: true
-        default: 'both'
-        type: choice
-        options:
-          - both
-          - windows
-          - macos
 
 permissions:
   contents: write
@@ -27,6 +17,8 @@ jobs:
     env:
       NODE_OPTIONS: '--max-old-space-size=4096'
       CHATBOX_BUILD_PLATFORM: electron
+      CSC_LINK: ''
+      CSC_KEY_PASSWORD: ''
     steps:
       - uses: actions/checkout@v4
 
@@ -41,17 +33,13 @@ jobs:
           corepack install --global pnpm@10.33.0
           pnpm --version
 
-      - name: Install dependencies
+      - name: Install
+        shell: bash
         run: pnpm install --frozen-lockfile
 
-      - name: Build
-        run: pnpm run build
-
-      - name: Package (Windows x64)
-        run: pnpm exec electron-builder build --publish never --win --x64
-        env:
-          CSC_LINK: ''
-          CSC_KEY_PASSWORD: ''
+      - name: Build & package
+        shell: bash
+        run: pnpm run build && pnpm exec electron-builder build --publish never --win
 
       - uses: actions/upload-artifact@v4
         with:
@@ -65,7 +53,6 @@ jobs:
           files: release/build/*.exe
           draft: true
           generate_release_notes: true
-          fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -88,18 +75,13 @@ jobs:
           corepack install --global pnpm@10.33.0
           pnpm --version
 
-      - name: Install dependencies
+      - name: Install
+        shell: bash
         run: pnpm install --frozen-lockfile
 
-      - name: Build
-        run: pnpm run build
-
-      - name: Package (macOS ARM64)
-        run: pnpm exec electron-builder build --publish never --mac --arm64
-        env:
-          APPLE_ID: ''
-          APPLE_ID_PASS: ''
-          APPLE_TEAM_ID: ''
+      - name: Build & package
+        shell: bash
+        run: pnpm run build && pnpm exec electron-builder build --publish never --mac
 
       - uses: actions/upload-artifact@v4
         with:
@@ -113,6 +95,5 @@ jobs:
           files: release/build/*.dmg
           draft: true
           generate_release_notes: true
-          fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
