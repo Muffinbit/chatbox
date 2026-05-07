@@ -17,8 +17,6 @@ jobs:
     env:
       NODE_OPTIONS: '--max-old-space-size=4096'
       CHATBOX_BUILD_PLATFORM: electron
-      CSC_LINK: ''
-      CSC_KEY_PASSWORD: ''
     steps:
       - uses: actions/checkout@v4
 
@@ -37,12 +35,6 @@ jobs:
 
       - name: Build
         run: pnpm run build
-
-      - name: Debug build output
-        run: |
-          Get-ChildItem -Path release\app\dist -Recurse -ErrorAction SilentlyContinue | Select-Object -First 5
-          if (-not (Test-Path release\app\dist)) { Write-Host "No dist dir" }
-          if (Test-Path release\build) { Get-ChildItem release\build } else { Write-Host "No build dir" }
 
       - name: Package
         run: npx electron-builder build --publish never --win --x64
