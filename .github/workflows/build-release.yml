@@ -40,11 +40,12 @@ jobs:
 
       - name: Debug build output
         run: |
-          dir release\app\dist /s /b 2>nul || echo "No dist dir"
-          dir release\build 2>nul || echo "No build dir"
+          Get-ChildItem -Path release\app\dist -Recurse -ErrorAction SilentlyContinue | Select-Object -First 5
+          if (-not (Test-Path release\app\dist)) { Write-Host "No dist dir" }
+          if (Test-Path release\build) { Get-ChildItem release\build } else { Write-Host "No build dir" }
 
       - name: Package
-        run: npx electron-builder build --publish never --win
+        run: npx.cmd electron-builder build --publish never --win
 
       - uses: actions/upload-artifact@v4
         with:
