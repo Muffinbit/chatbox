@@ -1,0 +1,107 @@
+name: Build & Release
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Platform to build (windows, macos, both)'
+        required: true
+        default: 'both'
+        type: choice
+        options:
+          - both
+          - windows
+          - macos
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            target: win
+            build-arch: x64
+          - os: macos-latest
+            target: mac
+            build-arch: arm64
+
+    # Allow manual override for platform
+    if: |
+      github.event_name != 'workflow_dispatch' ||
+      (github.event.inputs.platform == 'both' && true) ||
+      (github.event.inputs.platform == 'windows' && matrix.target == 'win') ||
+      (github.event.inputs.platform == 'macos' && matrix.target == 'mac')
+
+    runs-on: ${{ matrix.os }}
+
+    env:
+      NODE_OPTIONS: '--max-old-space-size=4096'
+      CHATBOX_BUILD_PLATFORM: electron
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.7.0'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build and package
+        run: |
+          pnpm run build
+          pnpm exec electron-builder build --publish never --${{ matrix.target }} --x64
+        env:
+          # Skip macOS notarization (no Apple dev account)
+          APPLE_ID: ''
+          APPLE_ID_PASS: ''
+          APPLE_TEAM_ID: ''
+          # Skip Windows signing (stub in place)
+          CSC_LINK: ''
+          CSC_KEY_PASSWORD: ''
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: chatbox-${{ matrix.target }}-${{ matrix.build-arch }}
+          path: |
+            release/build/*.exe
+            release/build/*.dmg
+            release/build/*.AppImage
+            release/build/*.deb
+            release/build/*.zip
+          if-no-files-found: warn
+
+      - name: Create Release (tag push only)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release/build/*.exe
+            release/build/*.dmg
+            release/build/*.AppImage
+            release/build/*.deb
+            release/build/*.zip
+          draft: true
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
