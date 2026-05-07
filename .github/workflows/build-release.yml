@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       platform:
-        description: 'Platform to build (windows, macos, both)'
+        description: 'Platform to build'
         required: true
         default: 'both'
         type: choice
@@ -22,86 +22,93 @@ permissions:
   contents: write
 
 jobs:
-  build:
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: windows-latest
-            target: win
-            build-arch: x64
-          - os: macos-latest
-            target: mac
-            build-arch: arm64
-
-    # Allow manual override for platform
-    if: |
-      github.event_name != 'workflow_dispatch' ||
-      (github.event.inputs.platform == 'both' && true) ||
-      (github.event.inputs.platform == 'windows' && matrix.target == 'win') ||
-      (github.event.inputs.platform == 'macos' && matrix.target == 'mac')
-
-    runs-on: ${{ matrix.os }}
-
+  build-windows:
+    runs-on: windows-latest
     env:
       NODE_OPTIONS: '--max-old-space-size=4096'
       CHATBOX_BUILD_PLATFORM: electron
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v4
         with:
           version: 10.33.0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '22.7.0'
+          node-version-file: '.node-version'
           cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build and package
-        run: |
-          pnpm run build
-          pnpm exec electron-builder build --publish never --${{ matrix.target }} --x64
+      - name: Build
+        run: pnpm run build
+
+      - name: Package (Windows x64)
+        run: pnpm exec electron-builder build --publish never --win --x64
         env:
-          # Skip macOS notarization (no Apple dev account)
+          CSC_LINK: ''
+          CSC_KEY_PASSWORD: ''
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chatbox-windows-x64
+          path: release/build/*.exe
+          if-no-files-found: error
+
+      - uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          files: release/build/*.exe
+          draft: true
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-macos:
+    runs-on: macos-latest
+    env:
+      NODE_OPTIONS: '--max-old-space-size=4096'
+      CHATBOX_BUILD_PLATFORM: electron
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node-version'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Package (macOS ARM64)
+        run: pnpm exec electron-builder build --publish never --mac --arm64
+        env:
           APPLE_ID: ''
           APPLE_ID_PASS: ''
           APPLE_TEAM_ID: ''
-          # Skip Windows signing (stub in place)
-          CSC_LINK: ''
-          CSC_KEY_PASSWORD: ''
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
-          name: chatbox-${{ matrix.target }}-${{ matrix.build-arch }}
-          path: |
-            release/build/*.exe
-            release/build/*.dmg
-            release/build/*.AppImage
-            release/build/*.deb
-            release/build/*.zip
-          if-no-files-found: warn
+          name: chatbox-macos-arm64
+          path: release/build/*.dmg
+          if-no-files-found: error
 
-      - name: Create Release (tag push only)
+      - uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v2
         with:
-          files: |
-            release/build/*.exe
-            release/build/*.dmg
-            release/build/*.AppImage
-            release/build/*.deb
-            release/build/*.zip
+          files: release/build/*.dmg
           draft: true
           generate_release_notes: true
+          fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
