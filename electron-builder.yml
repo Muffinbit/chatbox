@@ -4,6 +4,7 @@ asar: true
 asarUnpack:
   - "**\\*.{node,dll}"
   - "**/node_modules/libsql/**"
+  - "**/*.woff2"
 files:
   - "dist"
   # - "!dist/**/*.map"

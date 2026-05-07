@@ -308,6 +308,7 @@ function Root() {
 const creteMantineTheme = (scale = 1) =>
   createTheme({
     /** Put your mantine theme override here */
+    fontFamily: '"Noto Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
     scale,
     primaryColor: 'chatbox-brand',
     colors: {
