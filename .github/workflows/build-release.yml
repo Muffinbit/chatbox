@@ -27,19 +27,19 @@ jobs:
           node-version: 22
 
       - name: Enable corepack & pnpm
-        shell: bash
         run: |
           corepack enable
           corepack install --global pnpm@10.33.0
           pnpm --version
 
       - name: Install
-        shell: bash
         run: pnpm install --frozen-lockfile
 
-      - name: Build & package
-        shell: bash
-        run: pnpm run build && pnpm exec electron-builder build --publish never --win
+      - name: Build
+        run: pnpm run build
+
+      - name: Package
+        run: pnpm exec electron-builder build --publish never --win
 
       - uses: actions/upload-artifact@v4
         with:
