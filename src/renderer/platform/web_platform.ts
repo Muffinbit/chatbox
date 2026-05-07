@@ -106,27 +106,13 @@ export default class WebPlatform extends IndexedDBStorage implements Platform {
   }
 
   public async initTracking() {
-    const GAID = 'G-B365F44W6E'
-    try {
-      const conf = await this.getConfig()
-      window.gtag('config', GAID, {
-        app_name: 'chatbox',
-        user_id: conf.uuid,
-        client_id: conf.uuid,
-        app_version: await this.getVersion(),
-        chatbox_platform_type: 'web',
-        chatbox_platform: await this.getPlatform(),
-        app_platform: await this.getPlatform(),
-      })
-    } catch (e) {
-      window.gtag('config', GAID, {
-        app_name: 'chatbox',
-      })
-      throw e
-    }
+    // Analytics tracking disabled in this fork.
+    // To enable, replace GAID with your own Google Analytics 4 measurement ID.
+    return
   }
   public trackingEvent(name: string, params: { [key: string]: string }) {
-    window.gtag('event', name, params)
+    // Analytics tracking disabled in this fork.
+    return
   }
 
   public async shouldShowAboutDialogWhenStartUp(): Promise<boolean> {
