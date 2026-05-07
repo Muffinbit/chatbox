@@ -49,6 +49,18 @@ export function createOAuthCredentialManager(..._args: unknown[]): undefined {
   return undefined
 }
 
+// IPC channel names for OAuth flows on desktop
+// These are used by the renderer to call main-process OAuth handlers
+export const OAuthIpcChannels = {
+  LOGIN: 'oauth:login',
+  CANCEL: 'oauth:cancel',
+  START_LOGIN: 'oauth:startLogin',
+  EXCHANGE_CODE: 'oauth:exchangeCode',
+  START_DEVICE_FLOW: 'oauth:startDeviceFlow',
+  WAIT_DEVICE_TOKEN: 'oauth:waitDeviceToken',
+  REFRESH: 'oauth:refresh',
+} as const
+
 // No-op OAuth fetch stubs — they are only called when `isOAuth && credentialManager` is truthy,
 // which never happens in the open-source edition. Returning undefined keeps the type contract.
 export function createBearerOAuthFetch(..._args: unknown[]): undefined {

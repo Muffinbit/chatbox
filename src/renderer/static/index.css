@@ -1,3 +1,6 @@
+/* Include embedded Noto Sans SC font — must come before other rules */
+@import './noto-sans-sc.css';
+
 /* @tailwind base;
 @tailwind components;
 @tailwind utilities; */
@@ -9,9 +12,6 @@
 .title-bar .controls {
   -webkit-app-region: no-drag;
 }
-
-/* Include embedded Noto Sans SC font */
-@import './noto-sans-sc.css';
 
 body {
   margin: 0;
