@@ -39,7 +39,14 @@ jobs:
         run: pnpm run build
 
       - name: Package
-        run: pnpm exec electron-builder build --publish never --win
+        run: pnpm exec electron-builder build --publish never --win 2>&1
+        continue-on-error: false
+
+      - name: Show release build output
+        if: always()
+        shell: bash
+        run: |
+          ls -la release/build/ 2>/dev/null || echo "No build output"
 
       - uses: actions/upload-artifact@v4
         with:
